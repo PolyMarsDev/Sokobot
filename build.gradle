@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'com.polymars'
+version '1.0'
+
+mainClassName = "Bot"
+sourceCompatibility = 1.8;
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile 'net.dv8tion:JDA:4.1.1_162'
+}
