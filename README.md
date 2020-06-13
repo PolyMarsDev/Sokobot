@@ -4,6 +4,7 @@ Sokobot is a Discord bot written with [JDA](https://github.com/DV8FromTheWorld/J
 
 ## Screenshots
 ![reaction controls](https://cdn.discordapp.com/attachments/670425377503707146/721169251498590218/sokobot_1.gif)
+
 ![wasd command controls](https://cdn.discordapp.com/attachments/670425377503707146/721170521714196571/sokobot_2.gif)
 ## Features
 ### Infinite levels
