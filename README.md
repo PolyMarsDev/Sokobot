@@ -18,7 +18,7 @@ Thanks to the power of Java HashMaps™️, multiple users can use the bot at th
 - ``!stop`` can be used to stop your active game at any time.
 - ``!info`` provides some useful details about the bot and rules of the game.
 ## Usage
-Grab the [latest .jar](https://github/com/PolyMarsDev/Sokobot/releases) or [build it yourself](#compiling). Then, create a Discord Bot Application [here](https://discord.com/developers/applications/) and paste the bot token into ``token.txt``. Then, ensure the two files are in the same directory and run the .jar file.
+Grab the [latest .jar](https://github.com/PolyMarsDev/Sokobot/releases) or [build it yourself](#compiling). Then, create a Discord Bot Application [here](https://discord.com/developers/applications/) and paste the bot token into ``token.txt``. Then, ensure the two files are in the same directory and run the .jar file.
 
 
 
