@@ -3,7 +3,8 @@
 Sokobot is a Discord bot written with [JDA](https://github.com/DV8FromTheWorld/JDA) that lets you play [Sokoban](https://en.wikipedia.org/wiki/Sokoban), the classic box-pushing puzzle game.
 
 ## Screenshots
-![reaction controls](https://cdn.discordapp.com/attachments/670425377503707146/721169251498590218/sokobot_1.gif) ![wasd command controls](https://cdn.discordapp.com/attachments/670425377503707146/721170521714196571/sokobot_2.gif)
+![reaction controls](https://cdn.discordapp.com/attachments/670425377503707146/721169251498590218/sokobot_1.gif)
+![wasd command controls](https://cdn.discordapp.com/attachments/670425377503707146/721170521714196571/sokobot_2.gif)
 ## Features
 ### Infinite levels
 The maps in Sokobot are randomly generated, increasing in difficulty as you progress.
