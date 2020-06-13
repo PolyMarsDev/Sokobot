@@ -81,9 +81,10 @@ public class Commands extends ListenerAdapter {
         info.setDescription("Sokobot is a bot that lets you play Sokoban, the classic box-pushing puzzle game.");
         info.setColor(0xdd2e53);
         info.addField("How to Play", "You are a **Sokoban** :flushed:.\nYour job is to push **boxes** :brown_square: on top of their **destinations** :negative_squared_cross_mark:.", false);
-        info.addField("Features", ":white_small_square:**Infinite levels**\nThe fun never ends thanks to endless, randomly generated maps of increasing difficulty!\n:white_small_square:**Varied controls**\nSokobot has multiple control options to improve the player's experience, including reactions and wasd commands!\n:white_small_square:**Simultaneous games**\nThanks to the power of Java HashMaps:tm:, multiple users can use the bot at the same time without interfering with eachothers' games.", false);
-        info.addField("Commands", ("``" + Bot.prefix + "play`` can be used to start a game if you are not currently in one.\n``" + Bot.prefix + "stop`` can be used to stop your active game at any time.\n``" + Bot.prefix + "info`` provides some useful details about the bot."), false);
-        info.addField("Source code", "https://github.com/polymarsdev", false);
+        info.addField("Features", ":white_small_square:**Infinite levels**\nThe maps in Sokobot are randomly generated, increasing in difficulty as you progress.\n:white_small_square:**Varied controls**\nSokobot has multiple control options to improve the player's experience, including reactions and wasd commands!\n:white_small_square:**Simultaneous games**\nThanks to the power of Java HashMaps:tm:, multiple users can use the bot at the same time without interfering with one another.", false);
+        info.addField("Commands", ("``" + Bot.prefix + "play`` can be used to start a game if you are not currently in one.\n``" + Bot.prefix + "stop`` can be used to stop your active game at any time.\n``" + Bot.prefix + "info`` provides some useful details about the bot and rules of the game."), false);
+        info.addField("Source code", "https://github.com/PolyMarsDev/Sokobot", false);
+        info.addField("Latest build", "https://github.com/PolyMarsDev/Sokobot/releases", false);
         info.setFooter("created by PolyMars", "https://avatars0.githubusercontent.com/u/51007356?s=460&u=4eb8fd498421a2eee9781edfbadf654386cf06c7&v=4");
         return info;
     }
