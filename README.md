@@ -11,13 +11,23 @@ Sokobot is a Discord bot written with [JDA](https://github.com/DV8FromTheWorld/J
 The maps in Sokobot are randomly generated, increasing in difficulty as you progress.
 ### Varied controls
 Sokobot has multiple control options to improve the player's experience, including reactions and wasd commands!
-### Simulataneous games
+### Simultaneous games
 Thanks to the power of Java HashMaps™️, multiple users can use the bot at the same time without interfering with one another.
-### Commands
+### Custom prefixes ``New!``
+To prevent Sokobot from conflicting with other bots, admins can choose any single-character prefix to preface Sokobot's commands.
+
+## Commands
+### User
 - ``!play`` can be used to start a game if you are not currently in one.
 - ``!stop`` can be used to stop your active game at any time.
 - ``!info`` provides some useful details about the bot and rules of the game.
+### Admin ``New!``
+- ``!prefix [character]`` can be used to change the prefix the bot responds to in the current server. 
+
 ## Usage
+### Public host ``New!``
+Will be available very soon on [top.gg](https://top.gg)!
+### Self-hosting
 Grab the [latest .jar](https://github.com/PolyMarsDev/Sokobot/releases) or [build it yourself](#compiling). Then, create a Discord Bot Application [here](https://discord.com/developers/applications/) and paste the bot token into ``token.txt``. Then, ensure the two files are in the same directory and run the .jar file.
 
 
