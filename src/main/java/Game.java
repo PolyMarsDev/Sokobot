@@ -1,11 +1,24 @@
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class Game {
+    public Message gameMessage;
+    public User user;
     boolean gameActive = false;
     public int level = 1;
     int width = 9;
     int height = 6;
     Grid grid = new Grid(width, height, level);
+    public Game(User user)
+    {
+        this.user = user;
+    }
+    public void setGameMessage(Message message)
+    {
+        gameMessage = message;
+    }
     public void newGame(MessageChannel channel)
     {
         if (!gameActive)
@@ -16,15 +29,16 @@ public class Game {
             grid = new Grid(width, height, level);
 
             gameActive = true;
-            Commands.sendGameEmbed(channel, String.valueOf(level), grid.toString());
+            Commands.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
+
         }
     }
-    public void run(MessageChannel channel, String userInput)
+    public void run(Guild guild, MessageChannel channel, String userInput)
     {
         if (userInput.equals("stop") && gameActive)
         {
-           channel.sendMessage("Thanks for playing!").queue();
-            gameActive = false;
+           channel.sendMessage("Thanks for playing, " + user.getAsMention() + "!").queue();
+           gameActive = false;
         }
 
         if (userInput.equals("play") && !gameActive)
@@ -53,7 +67,7 @@ public class Game {
                     grid.reset();
                 }
                 if (!grid.hasWon()) { //need to check again
-                    Commands.sendGameEmbed(channel, String.valueOf(level), grid.toString());
+                    Commands.updateGameEmbed(gameMessage, String.valueOf(level), grid.toString(), user);
                 }
             }
             if (grid.hasWon()) {
@@ -65,7 +79,7 @@ public class Game {
                 {
                     height += 1;
                 }
-                Commands.sendWinEmbed(channel, String.valueOf(level));
+                Commands.sendWinEmbed(guild, gameMessage, String.valueOf(level));
                 grid = new Grid(width, height, level);
             }
             }

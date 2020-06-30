@@ -97,7 +97,7 @@ public class Grid
             int y = rand.nextInt(height - 4) + 2;
             for (int j = 0; j < i; j++)
             {
-                while ((x == boxes[j].getX() && y == boxes[j].getY()) || (x == 2 && y == 2))
+                while ((x == boxes[j].getX() && y == boxes[j].getY()) || (x == 2 && y == 2) || (x - 1 == boxes[j].getX() && y == boxes[j].getY()) || (x + 1 == boxes[j].getX() && y == boxes[j].getY()))
                 {
                     x = rand.nextInt(width - 4) + 2;
                     y = rand.nextInt(height - 4) + 2;
