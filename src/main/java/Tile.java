@@ -7,14 +7,17 @@ public class Tile
     final int PLAYER = 4;
     int color = 0;
     int status = 0;
-    public Tile(int status)
+    String playerEmote;
+    public Tile(int status, String playerEmote)
     {
         this.status = status;
+        this.playerEmote = playerEmote;
     }
-    public Tile(int status, int color)
+    public Tile(int status, int color, String playerEmote)
     {
         this.status = status;
         this.color = color;
+        this.playerEmote = playerEmote;
     }
     public void setStatus(int status)
     {
@@ -60,6 +63,6 @@ public class Tile
         {
             return ":negative_squared_cross_mark:";
         }
-        return ":flushed:";
+        return playerEmote;
     }
 }

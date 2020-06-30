@@ -14,9 +14,11 @@ public class Grid
     int width = 0;
     int color = 0;
     Player player;
+    String playerEmote;
     Randomizer rand = new Randomizer();
-    public Grid(int width, int height, int boxCount) //create a random grid with specific width, height, and number of boxes
+    public Grid(int width, int height, int boxCount, String playerEmote) //create a random grid with specific width, height, and number of boxes
     {
+        this.playerEmote = playerEmote;
         player = new Player(2, 2, this);
         if (boxCount > MAX_BOXES)
         {
@@ -129,21 +131,21 @@ public class Grid
         {
             for (int j = 0; j < width; j++)
             {
-                grid[j][i] = new Tile(GROUND);
+                grid[j][i] = new Tile(GROUND, playerEmote);
                 if (j == 0 || j == width - 1 || i == 0 || i == height - 1)
                 {
-                    grid[j][i] = new Tile(WALL, color);
+                    grid[j][i] = new Tile(WALL, color, playerEmote);
                 }
                 for (int k = 0; k < boxCount; k++)
                 {
                     if (destinations[k].getX() == j && destinations[k].getY() == i)
                     {
-                        grid[j][i] = new Tile(DESTINATION);
+                        grid[j][i] = new Tile(DESTINATION, playerEmote);
                     }
                 }
                 if (player.getX() == j && player.getY() == i)
                 {
-                    grid[j][i] = new Tile(PLAYER);
+                    grid[j][i] = new Tile(PLAYER, playerEmote);
                 }
                 for (int k = 0; k < boxCount; k++)
                 {
@@ -151,9 +153,9 @@ public class Grid
                     {
                         if (boxes[k].onDestination())
                         {
-                            grid[j][i] = new Tile(WALL, color);
+                            grid[j][i] = new Tile(WALL, color, playerEmote);
                         } else {
-                            grid[j][i] = new Tile(BOX);
+                            grid[j][i] = new Tile(BOX, playerEmote);
                         }
 
                     }

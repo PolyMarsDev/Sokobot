@@ -4,16 +4,21 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 public class Game {
-    public Message gameMessage;
-    public User user;
-    boolean gameActive = false;
+    Message gameMessage;
+    User user;
+    String playerEmote = ":flushed:";
+    public boolean gameActive = false;
     public int level = 1;
     int width = 9;
     int height = 6;
-    Grid grid = new Grid(width, height, level);
+    Grid grid = new Grid(width, height, level, playerEmote);
     public Game(User user)
     {
         this.user = user;
+    }
+    public void setPlayerEmote(String emote)
+    {
+        playerEmote = emote;
     }
     public void setGameMessage(Message message)
     {
@@ -26,7 +31,7 @@ public class Game {
             level = 1;
             width = 9;
             height = 6;
-            grid = new Grid(width, height, level);
+            grid = new Grid(width, height, level, playerEmote);
 
             gameActive = true;
             Commands.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
@@ -80,7 +85,7 @@ public class Game {
                     height += 1;
                 }
                 Commands.sendWinEmbed(guild, gameMessage, String.valueOf(level));
-                grid = new Grid(width, height, level);
+                grid = new Grid(width, height, level, playerEmote);
             }
             }
         }

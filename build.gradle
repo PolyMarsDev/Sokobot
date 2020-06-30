@@ -17,4 +17,5 @@ repositories {
 
 dependencies {
     compile 'net.dv8tion:JDA:4.1.1_162'
+    compile 'com.vdurmont:emoji-java:5.1.1'
 }

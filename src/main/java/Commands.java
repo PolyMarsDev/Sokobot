@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import com.vdurmont.emoji.EmojiManager;
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,6 +70,11 @@ public class Commands extends ListenerAdapter {
             if (Character.toString(userInput.charAt(0)).equals(Bot.getPrefix(event.getGuild())))
             {
                 userInput = userInput.substring(1, userInput.length());
+            }
+            if (!games.get(event.getAuthor()).gameActive && userInput.equals("play") && args.length == 2 && EmojiManager.isEmoji(args[1]))
+            {
+                System.out.println(args[1]);
+                games.get(event.getAuthor()).setPlayerEmote(args[1]);
             }
             games.get(event.getAuthor()).run(event.getGuild(), event.getChannel(), userInput);
             if (userInput.equals("stop")) //remove game from hashmap when player quits
