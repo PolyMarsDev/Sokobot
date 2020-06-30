@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.polymars'
-version '1.0'
+version '1.1'
 
 mainClassName = "Bot"
 sourceCompatibility = 1.8;
