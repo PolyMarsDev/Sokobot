@@ -26,7 +26,7 @@ To prevent Sokobot from conflicting with other bots, admins can choose any singl
 
 ## Usage
 ### Public host ``New!``
-Sokobot is available on top.gg and can be added to your server [in one click](https://top.gg/bot/713635251703906336/)!
+Sokobot is available on top.gg and can be added to your server [in one click](https://top.gg/bot/713635251703906336/)! You can alternatively add it using the direct link [here](https://discord.com/api/oauth2/authorize?client_id=713635251703906336&permissions=8192&scope=bot).
 ### Self-hosting
 Grab the [latest .jar](https://github.com/PolyMarsDev/Sokobot/releases) or [build it yourself](#compiling). Then, create a Discord Bot Application [here](https://discord.com/developers/applications/) and paste the bot token into ``token.txt``. Then, ensure the two files are in the same directory and run the .jar file.
 
