@@ -43,7 +43,6 @@ public class Commands extends ListenerAdapter {
         }
 
         String[] args = event.getMessage().getContentRaw().split("\\s+");
-
         if (args[0].toLowerCase().equals(Bot.getPrefix(event.getGuild()) + "prefix"))
         {
             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
@@ -53,12 +52,12 @@ public class Commands extends ListenerAdapter {
                 } else {
                     event.getChannel().sendMessage("``" + args[1] + "`` is not a valid prefix!").queue();
                 }
-                event.getMessage().delete().queue();
             }
             else
             {
                 event.getChannel().sendMessage(event.getAuthor().getAsMention() + ", you do not have permission to use this command.").queue();
             }
+            event.getMessage().delete().queue();
         }
         else if ((commandsNoPrefix.contains(args[0].toLowerCase())) || (Character.toString(args[0].toLowerCase().charAt(0)).equals(Bot.getPrefix(event.getGuild())) && commandsPrefix.contains(args[0].toLowerCase().substring(1))))
         {
@@ -124,11 +123,12 @@ public class Commands extends ListenerAdapter {
             default:
                 reactionCommand = false;
         }
-        if (reactionCommand)
-        {
-            games.get(event.getMember().getUser()).run(event.getGuild(), event.getChannel(), userInput);
+        if (event.getChannel().retrieveMessageById(event.getMessageId()).complete().getAuthor().equals(event.getJDA().getSelfUser())) {
+            if (reactionCommand) {
+                games.get(event.getMember().getUser()).run(event.getGuild(), event.getChannel(), userInput);
+            }
+            event.getReaction().removeReaction(event.getUser()).queue();
         }
-        event.getReaction().removeReaction(event.getUser()).queue();
     }
     EmbedBuilder info(Guild guild)
     {
@@ -140,7 +140,7 @@ public class Commands extends ListenerAdapter {
         info.addField("How to Play", "You are a **Sokoban** :flushed:.\nYour job is to push **boxes** :brown_square: on top of their **destinations** :negative_squared_cross_mark:.", false);
         info.addField("Features", ":white_small_square:**Infinite levels**\nThe maps in Sokobot are randomly generated, increasing in difficulty as you progress.\n:white_small_square:**Varied controls**\nSokobot has multiple control options to improve the player's experience, including reactions and wasd commands!\n:white_small_square:**Simultaneous games**\nThanks to the power of Java HashMaps:tm:, multiple users can use the bot at the same time without interfering with one another.\n:white_small_square:**Custom prefixes**\nTo prevent Sokobot from conflicting with other bots, admins can choose any single-character prefix to preface Sokobot's commands.", false);
         info.addField("Commands", ("``" + Bot.getPrefix(guild) + "play`` can be used to start a game if you are not currently in one.\n``" + Bot.getPrefix(guild) + "stop`` can be used to stop your active game at any time.\n``" + Bot.getPrefix(guild) + "info`` provides some useful details about the bot and rules of the game.\n``"+ Bot.getPrefix(guild) + "prefix [character]`` can be used to change the prefix the bot responds to."), false);
-        info.addField("Add to your server", "https://top.gg/bot/713635251703906336", false);
+        info.addField("Add to your server", "https://top.gg/bot/713635251703906336\nSokobot is currently in " + guild.getJDA().getGuilds().size() + " servers.", false);
         info.addField("Source code", "https://github.com/PolyMarsDev/Sokobot", false);
         info.setFooter("created by PolyMars", "https://avatars0.githubusercontent.com/u/51007356?s=460&u=4eb8fd498421a2eee9781edfbadf654386cf06c7&v=4");
         return info;
