@@ -148,7 +148,8 @@ public class Commands extends ListenerAdapter {
     public static void sendGameEmbed(MessageChannel channel, String level, String game, User user)
     {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Level " + level);
+        info.setTitle("Sokobot");
+        embed.setAuthor("Level " + level);
         embed.setDescription(game);
         embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "Player: " + user.getAsMention(), false);
         channel.sendMessage(embed.build()).queue();
@@ -156,7 +157,8 @@ public class Commands extends ListenerAdapter {
     public static void updateGameEmbed(Message message, String level, String game, User user)
     {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Level " + level);
+        info.setTitle("Sokobot");
+        embed.setAuthor("Level " + level);
         embed.setDescription(game);
         embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "Player: " + user.getAsMention(), false);
         message.editMessage(embed.build()).queue();
@@ -164,7 +166,8 @@ public class Commands extends ListenerAdapter {
     public static void sendWinEmbed(Guild guild, Message message, String level)
     {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("You win!");
+        info.setTitle("Sokobot");
+        embed.setAuthor("You win!");
         embed.setDescription("Type ``" + Bot.getPrefix(guild) + "continue`` to continue to Level " + level + " or ``" + Bot.getPrefix(guild) + "stop`` to quit ");
         embed.setFooter("You can also press any reaction to continue.");
         message.editMessage(embed.build()).queue();
