@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class Bot {
-    static HashMap<Guild, String> prefixes = new HashMap<Guild, String>();
+    static HashMap<Long, String> prefixes = new HashMap<>();
 
     public static void main(String[] args) throws LoginException, IOException {
-        DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder();
         String token = new String(Files.readAllBytes(Paths.get("token.txt")));
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
         builder.setToken(token);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setActivity(Activity.playing("@Sokobot for info!"));
@@ -24,15 +24,15 @@ public class Bot {
 
     static void setPrefix(Guild guild, String prefix)
     {
-        prefixes.put(guild, prefix);
+        prefixes.put(guild.getIdLong(), prefix);
     }
 
     static String getPrefix(Guild guild)
     {
-        if (!prefixes.containsKey(guild))
+        if (!prefixes.containsKey(guild.getIdLong()))
         {
             return "!";
         }
-        return prefixes.get(guild);
+        return prefixes.get(guild.getIdLong());
     }
 }

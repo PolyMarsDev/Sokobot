@@ -6,7 +6,9 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import com.vdurmont.emoji.EmojiManager;
@@ -17,27 +19,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Commands extends ListenerAdapter {
-    HashMap<User, Game> games = new HashMap<User, Game>();
+    HashMap<Long, Game> games = new HashMap<Long, Game>();
     ArrayList<String> commandsPrefix = new ArrayList<String>(Arrays.asList("play", "continue", "stop"));
     ArrayList<String> commandsNoPrefix = new ArrayList<String>(Arrays.asList("w", "a", "s", "d", "up", "left", "down", "right", "r"));
     public void onGuildLeave(GuildLeaveEvent event) //removes bot's stored prefix for a server if removed from that server
     {
-        if (Bot.prefixes.containsKey(event.getGuild()))
-        {
-            Bot.prefixes.remove(event.getGuild());
-        }
+        Bot.prefixes.remove(event.getGuild().getIdLong());
     }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        if (event.getAuthor().equals(event.getJDA().getSelfUser()) && event.getMessage().getEmbeds().size() > 0 && event.getMessage().getEmbeds().get(0).getTitle().length() > 0 && event.getMessage().getEmbeds().get(0).getTitle().charAt(0) == 'L') {
+        if (event.getAuthor().equals(event.getJDA().getSelfUser()) && event.getMessage().getEmbeds().size() > 0 && event.getMessage().getEmbeds().get(0).getTitle().length() > 0 && event.getMessage().getEmbeds().get(0).getTitle().charAt(0) == 'L')
+        {
             event.getMessage().addReaction("U+2B05").queue();
             event.getMessage().addReaction("U+27A1").queue();
             event.getMessage().addReaction("U+2B06").queue();
             event.getMessage().addReaction("U+2B07").queue();
             event.getMessage().addReaction("U+1F504").queue();
-            if (games.containsKey(event.getJDA().getUserById(event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().substring(10, event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().length() - 1))))
+            long userId = Long.parseLong(event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().substring(10, event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().length() - 1));
+            if (games.containsKey(userId))
             {
-                games.get(event.getJDA().getUserById(event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().substring(10, event.getMessage().getEmbeds().get(0).getFields().get(0).getValue().length() - 1))).setGameMessage(event.getMessage());
+                games.get(userId).setGameMessage(event.getMessage());
             }
             return;
         }
@@ -61,27 +62,24 @@ public class Commands extends ListenerAdapter {
         }
         else if (args.length > 0 && ((commandsNoPrefix.contains(args[0].toLowerCase())) || (args[0].length() > 0 && Character.toString(args[0].toLowerCase().charAt(0)).equals(Bot.getPrefix(event.getGuild())) && commandsPrefix.contains(args[0].toLowerCase().substring(1)))))
         {
-            if (!games.containsKey(event.getAuthor()))
+            if (!games.containsKey(event.getAuthor().getIdLong()))
             {
-                games.put(event.getAuthor(), new Game(event.getAuthor()));
+                games.put(event.getAuthor().getIdLong(), new Game(event.getAuthor()));
             }
             String userInput = args[0].toLowerCase();
             if (Character.toString(userInput.charAt(0)).equals(Bot.getPrefix(event.getGuild())))
             {
                 userInput = userInput.substring(1, userInput.length());
             }
-            if (!games.get(event.getAuthor()).gameActive && userInput.equals("play") && args.length == 2 && EmojiManager.isEmoji(args[1]))
+            if (!games.get(event.getAuthor().getIdLong()).gameActive && userInput.equals("play") && args.length == 2 && EmojiManager.isEmoji(args[1]))
             {
                 System.out.println(args[1]);
-                games.get(event.getAuthor()).setPlayerEmote(args[1]);
+                games.get(event.getAuthor().getIdLong()).setPlayerEmote(args[1]);
             }
-            games.get(event.getAuthor()).run(event.getGuild(), event.getChannel(), userInput);
+            games.get(event.getAuthor().getIdLong()).run(event.getGuild(), event.getChannel(), userInput);
             if (userInput.equals("stop")) //remove game from hashmap when player quits
             {
-                if (games.containsKey(event.getAuthor()))
-                {
-                    games.remove(event.getAuthor());
-                }
+                games.remove(event.getAuthor().getIdLong());
             }
             event.getMessage().delete().queue();
         }
@@ -91,47 +89,51 @@ public class Commands extends ListenerAdapter {
             event.getMessage().delete().queue();
         }
     }
-    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event)
-    {
-        if (event.getMember().getUser().isBot())
-        {
-            return;
-        }
-        if (event.getChannel().retrieveMessageById(event.getMessageId()).complete().getAuthor().equals(event.getJDA().getSelfUser())) {
 
-            if (!games.containsKey(event.getMember().getUser()))
+    @Override
+    public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
+        if(event instanceof GuildMessageReactionAddEvent || event instanceof GuildMessageReactionRemoveEvent)
+        {
+            if (event.getMember().getUser().isBot())
             {
-                games.put(event.getMember().getUser(), new Game(event.getMember().getUser()));
+                return;
             }
-            boolean reactionCommand = true;
-            String userInput = "";
-            switch (event.getReactionEmote().toString())
-            {
-                case "RE:U+2b05":
-                    userInput = "left";
-                    break;
-                case "RE:U+27a1":
-                    userInput = "right";
-                    break;
-                case "RE:U+2b06":
-                    userInput = "up";
-                    break;
-                case "RE:U+2b07":
-                   userInput = "down";
-                   break;
-                case "RE:U+1f504":
-                  userInput = "r";
-                  break;
-              default:
-                  reactionCommand = false;
-                  break;
+            if (event.getChannel().retrieveMessageById(event.getMessageId()).complete().getAuthor().equals(event.getJDA().getSelfUser())) {
+
+                if (!games.containsKey(event.getMember().getIdLong()))
+                {
+                    games.put(event.getMember().getIdLong(), new Game(event.getMember().getUser()));
+                }
+                boolean reactionCommand = true;
+                String userInput = "";
+                switch (event.getReactionEmote().toString())
+                {
+                    case "RE:U+2b05":
+                        userInput = "left";
+                        break;
+                    case "RE:U+27a1":
+                        userInput = "right";
+                        break;
+                    case "RE:U+2b06":
+                        userInput = "up";
+                        break;
+                    case "RE:U+2b07":
+                        userInput = "down";
+                        break;
+                    case "RE:U+1f504":
+                        userInput = "r";
+                        break;
+                    default:
+                        reactionCommand = false;
+                        break;
+                }
+                if (reactionCommand) {
+                    games.get(event.getMember().getUser().getIdLong()).run(event.getGuild(), event.getChannel(), userInput);
+                }
             }
-            if (reactionCommand) {
-                games.get(event.getMember().getUser()).run(event.getGuild(), event.getChannel(), userInput);
-            }
-            event.getReaction().removeReaction(event.getUser()).queue();
         }
     }
+
     EmbedBuilder info(Guild guild)
     {
         EmbedBuilder info = new EmbedBuilder();
