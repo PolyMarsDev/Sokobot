@@ -1,8 +1,7 @@
-import net.dv8tion.jda.api.AccountType;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -14,7 +13,7 @@ public class Bot {
     static HashMap<Guild, String> prefixes = new HashMap<Guild, String>();
 
     public static void main(String[] args) throws LoginException, IOException {
-        JDABuilder builder = new JDABuilder(AccountType.BOT);
+        DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder();
         String token = new String(Files.readAllBytes(Paths.get("token.txt")));
         builder.setToken(token);
         builder.setStatus(OnlineStatus.ONLINE);

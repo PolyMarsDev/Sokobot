@@ -29,7 +29,7 @@ public class Commands extends ListenerAdapter {
     }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        if (event.getAuthor().isBot() && event.getMessage().getEmbeds().get(0).getTitle().charAt(0) == 'L') {
+        if (event.getAuthor().equals(event.getJDA().getSelfUser()) && event.getMessage().getEmbeds().size() > 0 && event.getMessage().getEmbeds().get(0).getTitle().length() > 0 && event.getMessage().getEmbeds().get(0).getTitle().charAt(0) == 'L') {
             event.getMessage().addReaction("U+2B05").queue();
             event.getMessage().addReaction("U+27A1").queue();
             event.getMessage().addReaction("U+2B06").queue();
@@ -43,7 +43,7 @@ public class Commands extends ListenerAdapter {
         }
 
         String[] args = event.getMessage().getContentRaw().split("\\s+");
-        if (args[0].toLowerCase().equals(Bot.getPrefix(event.getGuild()) + "prefix"))
+        if (args.length > 0 && args[0].toLowerCase().equals(Bot.getPrefix(event.getGuild()) + "prefix"))
         {
             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
                 if (args.length == 2 && args[1].length() == 1) {
@@ -59,7 +59,7 @@ public class Commands extends ListenerAdapter {
             }
             event.getMessage().delete().queue();
         }
-        else if ((commandsNoPrefix.contains(args[0].toLowerCase())) || (Character.toString(args[0].toLowerCase().charAt(0)).equals(Bot.getPrefix(event.getGuild())) && commandsPrefix.contains(args[0].toLowerCase().substring(1))))
+        else if (args.length > 0 && ((commandsNoPrefix.contains(args[0].toLowerCase())) || (args[0].length() > 0 && Character.toString(args[0].toLowerCase().charAt(0)).equals(Bot.getPrefix(event.getGuild())) && commandsPrefix.contains(args[0].toLowerCase().substring(1)))))
         {
             if (!games.containsKey(event.getAuthor()))
             {
@@ -85,7 +85,7 @@ public class Commands extends ListenerAdapter {
             }
             event.getMessage().delete().queue();
         }
-        else if (args[0].toLowerCase().equals(Bot.getPrefix(event.getGuild()) + "info") || event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser()))
+        else if ((args.length > 0 && args[0].toLowerCase().equals(Bot.getPrefix(event.getGuild()) + "info")) || (event.getMessage().getMentionedUsers().size() > 0 && event.getMessage().getMentionedUsers().get(0).equals(event.getJDA().getSelfUser())))
         {
             event.getChannel().sendMessage(info(event.getGuild()).build()).queue();
             event.getMessage().delete().queue();
@@ -97,33 +97,35 @@ public class Commands extends ListenerAdapter {
         {
             return;
         }
-        if (!games.containsKey(event.getMember().getUser()))
-        {
-            games.put(event.getMember().getUser(), new Game(event.getMember().getUser()));
-        }
-        boolean reactionCommand = true;
-        String userInput = "";
-        switch (event.getReactionEmote().toString())
-        {
-            case "RE:U+2b05":
-                userInput = "left";
-                break;
-            case "RE:U+27a1":
-                userInput = "right";
-                break;
-            case "RE:U+2b06":
-                userInput = "up";
-                break;
-            case "RE:U+2b07":
-                userInput = "down";
-                break;
-            case "RE:U+1f504":
-                userInput = "r";
-                break;
-            default:
-                reactionCommand = false;
-        }
         if (event.getChannel().retrieveMessageById(event.getMessageId()).complete().getAuthor().equals(event.getJDA().getSelfUser())) {
+
+            if (!games.containsKey(event.getMember().getUser()))
+            {
+                games.put(event.getMember().getUser(), new Game(event.getMember().getUser()));
+            }
+            boolean reactionCommand = true;
+            String userInput = "";
+            switch (event.getReactionEmote().toString())
+            {
+                case "RE:U+2b05":
+                    userInput = "left";
+                    break;
+                case "RE:U+27a1":
+                    userInput = "right";
+                    break;
+                case "RE:U+2b06":
+                    userInput = "up";
+                    break;
+                case "RE:U+2b07":
+                   userInput = "down";
+                   break;
+                case "RE:U+1f504":
+                  userInput = "r";
+                  break;
+              default:
+                  reactionCommand = false;
+                  break;
+            }
             if (reactionCommand) {
                 games.get(event.getMember().getUser()).run(event.getGuild(), event.getChannel(), userInput);
             }
@@ -140,7 +142,7 @@ public class Commands extends ListenerAdapter {
         info.addField("How to Play", "You are a **Sokoban** :flushed:.\nYour job is to push **boxes** :brown_square: on top of their **destinations** :negative_squared_cross_mark:.", false);
         info.addField("Features", ":white_small_square:**Infinite levels**\nThe maps in Sokobot are randomly generated, increasing in difficulty as you progress.\n:white_small_square:**Varied controls**\nSokobot has multiple control options to improve the player's experience, including reactions and wasd commands!\n:white_small_square:**Simultaneous games**\nThanks to the power of Java HashMaps:tm:, multiple users can use the bot at the same time without interfering with one another.\n:white_small_square:**Custom prefixes**\nTo prevent Sokobot from conflicting with other bots, admins can choose any single-character prefix to preface Sokobot's commands.", false);
         info.addField("Commands", ("``" + Bot.getPrefix(guild) + "play`` can be used to start a game if you are not currently in one.\n``" + Bot.getPrefix(guild) + "stop`` can be used to stop your active game at any time.\n``" + Bot.getPrefix(guild) + "info`` provides some useful details about the bot and rules of the game.\n``"+ Bot.getPrefix(guild) + "prefix [character]`` can be used to change the prefix the bot responds to."), false);
-        info.addField("Add to your server", "https://top.gg/bot/713635251703906336\nSokobot is currently in " + guild.getJDA().getGuilds().size() + " servers.", false);
+        info.addField("Add to your server", "https://top.gg/bot/713635251703906336\nSokobot is currently in " + guild.getJDA().getShardManager().getGuilds().size() + " servers.", false);
         info.addField("Source code", "https://github.com/PolyMarsDev/Sokobot", false);
         info.setFooter("created by PolyMars", "https://avatars0.githubusercontent.com/u/51007356?s=460&u=4eb8fd498421a2eee9781edfbadf654386cf06c7&v=4");
         return info;
