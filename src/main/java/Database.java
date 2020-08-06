@@ -1,3 +1,4 @@
+import java.io.File;
 import java.sql.*;
 
 public class Database {
@@ -9,8 +10,8 @@ public class Database {
      * Set this data if you use DBType#SQLite
      *
      * @param filePath This can either be a relative or absolute path.
-     *                 ex: sokobot.db
-     *                 or: C:/sqlite/db/sokobot.db
+     * ex: sokobot.db
+     * or: C:/sqlite/db/sokobot.db
      */
     private final String filePath = "sokobot.db";
 
@@ -32,8 +33,16 @@ public class Database {
                 con = DriverManager.getConnection(
                         "jdbc:mysql://" + mysql_hostname + ":" + mysql_port + "/" + mysql_database
                                 + "?autoReconnect=true", mysql_username, mysql_password);
-            } else if(dbType == DBType.SQLite){
+                System.out.println("[INFO] Successfully initialized databse connection.");
+            } else if (dbType == DBType.SQLite) {
+                File sqliteFile = new File(filePath);
+                if (!sqliteFile.exists()) {
+                    System.out.println("[INFO] SQLite file \"" + filePath + "\" not found, creating file...");
+                    boolean create = sqliteFile.createNewFile();
+                    if (!create) System.out.println("[ERROR] Could not create SQLite file at " + filePath);
+                }
                 con = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+                System.out.println("[INFO] Successfully initialized databse connection.");
             }
         } catch (Exception ex) {
             System.out.println("[ERROR] Error at creating database connection: " + ex.getMessage());
