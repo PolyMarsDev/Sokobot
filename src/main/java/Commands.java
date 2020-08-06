@@ -18,7 +18,7 @@ public class Commands extends ListenerAdapter {
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
         Guild guild = event.getGuild();
-        Bot.prefixes.remove(guild.getIdLong());
+        Bot.removePrefix(guild.getIdLong());
     }
 
     @Override
