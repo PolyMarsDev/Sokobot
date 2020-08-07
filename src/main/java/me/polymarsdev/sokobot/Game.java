@@ -1,3 +1,7 @@
+package me.polymarsdev.sokobot;
+
+import me.polymarsdev.sokobot.objects.Grid;
+import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.entities.*;
 
 public class Game {
@@ -32,7 +36,7 @@ public class Game {
             height = 6;
             grid = new Grid(width, height, level, playerEmote);
             gameActive = true;
-            Commands.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
+            GameUtil.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
         }
     }
 
@@ -41,27 +45,37 @@ public class Game {
             channel.sendMessage("Thanks for playing, " + user.getAsMention() + "!").queue();
             gameActive = false;
         }
-
         if (userInput.equals("play") && !gameActive) {
             newGame(channel);
         } else if (gameActive) {
             if (!grid.hasWon()) {
                 String direction = userInput;
-                if (direction.equals("up") || direction.equals("w")) {
-                    grid.getPlayer().moveUp();
-                } else if (direction.equals("down") || direction.equals("s")) {
-                    grid.getPlayer().moveDown();
-                } else if (direction.equals("left") || direction.equals("a")) {
-                    grid.getPlayer().moveLeft();
-                } else if (direction.equals("right") || direction.equals("d")) {
-                    grid.getPlayer().moveRight();
-                } else if (direction.equals("r")) {
-                    grid.reset();
+                switch (direction) {
+                    case "up":
+                    case "w":
+                        grid.getPlayer().moveUp();
+                        break;
+                    case "down":
+                    case "s":
+                        grid.getPlayer().moveDown();
+                        break;
+                    case "left":
+                    case "a":
+                        grid.getPlayer().moveLeft();
+                        break;
+                    case "right":
+                    case "d":
+                        grid.getPlayer().moveRight();
+                        break;
+                    case "r":
+                        grid.reset();
+                        break;
                 }
                 if (!grid.hasWon()) {
                     TextChannel textChannel = Bot.getShardManager().getTextChannelById(channelID);
                     if (textChannel != null) {
-                        textChannel.retrieveMessageById(gameMessageID).queue(gameMessage -> Commands.updateGameEmbed(gameMessage, String.valueOf(level), grid.toString(), user));
+                        textChannel.retrieveMessageById(gameMessageID).queue(gameMessage -> GameUtil
+                                .updateGameEmbed(gameMessage, String.valueOf(level), grid.toString(), user));
                     }
                 }
             }
@@ -75,8 +89,8 @@ public class Game {
                 }
                 TextChannel textChannel = Bot.getShardManager().getTextChannelById(channelID);
                 if (textChannel != null) {
-                    textChannel.retrieveMessageById(gameMessageID).queue(gameMessage -> Commands.sendWinEmbed(guild,
-                            gameMessage, String.valueOf(level)));
+                    textChannel.retrieveMessageById(gameMessageID)
+                            .queue(gameMessage -> GameUtil.sendWinEmbed(guild, gameMessage, String.valueOf(level)));
                 }
                 grid = new Grid(width, height, level, playerEmote);
             }

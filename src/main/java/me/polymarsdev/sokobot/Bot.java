@@ -1,3 +1,8 @@
+package me.polymarsdev.sokobot;
+
+import me.polymarsdev.sokobot.database.Database;
+import me.polymarsdev.sokobot.listener.CommandListener;
+import me.polymarsdev.sokobot.listener.GameListener;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,6 +21,15 @@ import java.util.Scanner;
 public class Bot {
     static HashMap<Long, String> prefixes = new HashMap<>();
 
+    /**
+     * You can enable the database here.
+     * Set the DB Type to MySQL or SQLite, which you want to use.
+     * -
+     * You can configure login data in the Database class.
+     */
+    private static final boolean enableDatabase = false;
+    private static final Database.DBType dbType = Database.DBType.SQLite;
+
     private static ShardManager shardManager;
     private static Database database = null;
 
@@ -25,16 +39,27 @@ public class Bot {
             File tokenFile = Paths.get("token.txt").toFile();
             if (!tokenFile.exists()) {
                 System.out.println("[ERROR] Could not find token.txt file");
-                System.out.println("[ERROR] Please create a file called \"token.txt\" in the same folder as the jar "
-                                           + "file and paste in your bot token.");
-                return;
+                System.out.print("Please paste in your bot token: ");
+                Scanner s = new Scanner(System.in);
+                token = s.nextLine();
+                System.out.println();
+                System.out.println("[INFO] Creating token.txt - please wait");
+                if (!tokenFile.createNewFile()) {
+                    System.out.println(
+                            "[ERROR] Could not create token.txt - please create this file and paste in your token"
+                                    + ".");
+                    s.close();
+                    return;
+                }
+                Files.write(tokenFile.toPath(), token.getBytes());
+                s.close();
             }
             token = new String(Files.readAllBytes(tokenFile.toPath()));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         if (token == null) return;
-        // database = new Database(Database.DBType.SQLite);
+        if (enableDatabase) database = new Database(dbType);
         if (database != null) {
             if (!database.isConnected()) {
                 database = null;
@@ -48,13 +73,14 @@ public class Bot {
         DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(token);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setActivity(Activity.playing("@Sokobot for info!"));
-        builder.addEventListeners(new Commands());
+        builder.addEventListeners(new GameListener(), new CommandListener());
         shardManager = builder.build();
         Thread consoleThread = new Thread(() -> {
             Scanner s = new Scanner(System.in);
             while (s.hasNextLine()) {
                 processCommand(s.nextLine());
             }
+            s.close();
         });
         consoleThread.setDaemon(true);
         consoleThread.setName("Console Thread");
@@ -84,14 +110,14 @@ public class Bot {
         return shardManager;
     }
 
-    static void removePrefix(long guildId) {
+    public static void removePrefix(long guildId) {
         prefixes.remove(guildId);
         if (database != null) {
             database.update("DELETE FROM guildprefix WHERE guildId=?;", String.valueOf(guildId));
         }
     }
 
-    static void setPrefix(Guild guild, String prefix) {
+    public static void setPrefix(Guild guild, String prefix) {
         prefixes.put(guild.getIdLong(), prefix);
         if (database != null) {
             database.update("DELETE FROM guildprefix WHERE guildId=?;", guild.getId());
@@ -99,7 +125,7 @@ public class Bot {
         }
     }
 
-    static String getPrefix(Guild guild) {
+    public static String getPrefix(Guild guild) {
         if (prefixes.containsKey(guild.getIdLong())) return prefixes.get(guild.getIdLong());
         if (database != null) {
             try (ResultSet rs = database.query("SELECT prefix FROM guildprefix WHERE guildId=?;", guild.getId())) {

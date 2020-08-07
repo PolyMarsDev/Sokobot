@@ -1,3 +1,7 @@
+package me.polymarsdev.sokobot.entity;
+
+import me.polymarsdev.sokobot.objects.Grid;
+
 public class Player
 {
     int x = 0;

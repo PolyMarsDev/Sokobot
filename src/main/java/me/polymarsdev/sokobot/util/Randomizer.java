@@ -1,3 +1,5 @@
+package me.polymarsdev.sokobot.util;
+
 import java.util.*;
 
 public class Randomizer{

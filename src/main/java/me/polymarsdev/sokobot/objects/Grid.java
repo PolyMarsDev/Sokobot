@@ -1,3 +1,8 @@
+package me.polymarsdev.sokobot.objects;
+
+import me.polymarsdev.sokobot.entity.Player;
+import me.polymarsdev.sokobot.util.Randomizer;
+
 public class Grid
 {
     final int GROUND = 0;

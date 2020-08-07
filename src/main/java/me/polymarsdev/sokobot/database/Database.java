@@ -1,15 +1,17 @@
+package me.polymarsdev.sokobot.database;
+
 import java.io.File;
 import java.sql.*;
 
 public class Database {
 
-    enum DBType {MySQL, SQLite}
+    public enum DBType {MySQL, SQLite}
 
     /**
      * SQLite Data
      * Set this data if you use DBType#SQLite
      *
-     * @param filePath This can either be a relative or absolute path.
+     * field filePath - This can either be a relative or absolute path.
      * ex: sokobot.db
      * or: C:/sqlite/db/sokobot.db
      */
