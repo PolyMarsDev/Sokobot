@@ -80,7 +80,6 @@ public class Bot {
             while (s.hasNextLine()) {
                 processCommand(s.nextLine());
             }
-            s.close();
         });
         consoleThread.setDaemon(true);
         consoleThread.setName("Console Thread");
