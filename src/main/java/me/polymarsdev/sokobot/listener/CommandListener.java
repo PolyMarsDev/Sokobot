@@ -73,16 +73,19 @@ public class CommandListener extends ListenerAdapter {
             String prefix = Bot.getPrefix(guild);
             String arg = args[0].toLowerCase();
             boolean isCommand;
-            if (arg.startsWith(prefix)) {
-                if (commandsNoPrefix.contains(arg)) {
-                    isCommand = true;
+            if (isMention) isCommand = true;
+            else {
+                if (arg.startsWith(prefix)) {
+                    if (commandsNoPrefix.contains(arg)) {
+                        isCommand = true;
+                    } else {
+                        String commandName = arg.substring(prefix.length()).toLowerCase();
+                        isCommand = commands.containsKey(commandName);
+                        if (isCommand) arg = commandName;
+                    }
                 } else {
-                    String commandName = arg.substring(prefix.length()).toLowerCase();
-                    isCommand = commands.containsKey(commandName);
-                    if (isCommand) arg = commandName;
+                    isCommand = commandsNoPrefix.contains(arg);
                 }
-            } else {
-                isCommand = commandsNoPrefix.contains(arg);
             }
             if (isCommand) {
                 if (!hasPermissions(guild, channel)) {
