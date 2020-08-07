@@ -47,14 +47,16 @@ public class CommandListener extends ListenerAdapter {
                         message.addReaction("U+2B06").queue();
                         message.addReaction("U+2B07").queue();
                         message.addReaction("U+1F504").queue();
-                        MessageEmbed.Footer footerObject = embed.getFooter();
-                        if (footerObject != null) {
-                            String footer = footerObject.getText();
-                            if (footer != null) {
-                                long playerId = Long.parseLong(footer.substring(10, footer.length() - 1));
-                                if (GameUtil.hasGame(playerId)) {
-                                    Game game = GameUtil.getGame(playerId);
-                                    game.setGameMessage(message);
+                        List<MessageEmbed.Field> fields = embed.getFields();
+                        for (MessageEmbed.Field field : fields) {
+                            if (field.getName() != null && field.getName().equals("Player")) {
+                                if (field.getValue() != null) {
+                                    long playerId = Long
+                                            .parseLong(field.getValue().substring(2, field.getValue().length() - 1));
+                                    if (GameUtil.hasGame(playerId)) {
+                                        Game game = GameUtil.getGame(playerId);
+                                        game.setGameMessage(message);
+                                    }
                                 }
                             }
                         }

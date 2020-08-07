@@ -36,7 +36,6 @@ public class GameUtil {
         embed.setDescription(game);
         embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "", false);
         embed.addField("Player", user.getAsMention(), false);
-        embed.setFooter("Game of " + user.getAsMention(), user.getAvatarUrl());
         channel.sendMessage(embed.build()).queue();
     }
 
@@ -45,7 +44,7 @@ public class GameUtil {
         embed.setTitle("Sokobot | Level " + level);
         embed.setDescription(game);
         embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "", false);
-        embed.setFooter("Game of " + user.getAsMention(), user.getAvatarUrl());
+        embed.addField("Player", user.getAsMention(), false);
         message.editMessage(embed.build()).queue();
     }
 
