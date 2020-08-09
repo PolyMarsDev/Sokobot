@@ -17,7 +17,7 @@ import java.util.*;
 
 public class CommandListener extends ListenerAdapter {
     private static final ArrayList<String> commandsNoPrefix = new ArrayList<>(
-            Arrays.asList("w", "a", "s", "d", "up", "left", "down", "right", "r"));
+            Arrays.asList("w", "a", "s", "d", "up", "left", "down", "right", "r", "mr"));
     private static final HashMap<String, Command> commands = new HashMap<>();
 
     public CommandListener() {

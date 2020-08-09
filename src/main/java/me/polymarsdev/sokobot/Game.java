@@ -67,6 +67,9 @@ public class Game {
                     case "d":
                         grid.getPlayer().moveRight();
                         break;
+                    case "mr":
+                        grid.resetMap();
+                        break;
                     case "r":
                         grid.reset();
                         break;

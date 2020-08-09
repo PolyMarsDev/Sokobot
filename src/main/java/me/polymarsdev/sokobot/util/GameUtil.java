@@ -34,7 +34,10 @@ public class GameUtil {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Sokobot | Level " + level);
         embed.setDescription(game);
-        embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "", false);
+        embed.addField(
+                "Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
+                        + "recreate the map",
+                "", false);
         embed.addField("Player", user.getAsMention(), false);
         channel.sendMessage(embed.build()).queue();
     }
@@ -43,7 +46,10 @@ public class GameUtil {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Sokobot | Level " + level);
         embed.setDescription(game);
-        embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``) or ``r`` to reset", "", false);
+        embed.addField(
+                "Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
+                        + "recreate the map",
+                "", false);
         embed.addField("Player", user.getAsMention(), false);
         message.editMessage(embed.build()).queue();
     }

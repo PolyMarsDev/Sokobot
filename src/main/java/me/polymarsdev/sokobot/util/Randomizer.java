@@ -6,10 +6,6 @@ public class Randomizer{
 
     public static Random theInstance = null;
 
-    public Randomizer(){
-
-    }
-
     public static Random getInstance(){
         if(theInstance == null){
             theInstance = new Random();
