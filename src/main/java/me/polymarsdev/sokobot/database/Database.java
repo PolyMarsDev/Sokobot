@@ -35,7 +35,7 @@ public class Database {
                 con = DriverManager.getConnection(
                         "jdbc:mysql://" + mysql_hostname + ":" + mysql_port + "/" + mysql_database
                                 + "?autoReconnect=true", mysql_username, mysql_password);
-                System.out.println("[INFO] Successfully initialized databse connection.");
+                System.out.println("[INFO] Successfully initialized database connection.");
             } else if (dbType == DBType.SQLite) {
                 File sqliteFile = new File(filePath);
                 if (!sqliteFile.exists()) {
@@ -44,7 +44,7 @@ public class Database {
                     if (!create) System.out.println("[ERROR] Could not create SQLite file at " + filePath);
                 }
                 con = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-                System.out.println("[INFO] Successfully initialized databse connection.");
+                System.out.println("[INFO] Successfully initialized database connection.");
             }
         } catch (Exception ex) {
             System.out.println("[ERROR] Error at creating database connection: " + ex.getMessage());
