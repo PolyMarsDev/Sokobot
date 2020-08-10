@@ -4,6 +4,8 @@ import me.polymarsdev.sokobot.objects.Grid;
 import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.concurrent.TimeUnit;
+
 public class Game {
     long gameMessageID;
     long channelID;
@@ -13,6 +15,7 @@ public class Game {
     public int level = 1;
     int width = 9;
     int height = 6;
+    public long lastAction;
     Grid grid = new Grid(width, height, level, playerEmote);
 
     public Game(User user) {
@@ -36,14 +39,25 @@ public class Game {
             height = 6;
             grid = new Grid(width, height, level, playerEmote);
             gameActive = true;
+            lastAction = System.currentTimeMillis();
             GameUtil.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
         }
     }
 
+    public void stop() {
+        gameActive = false;
+        TextChannel textChannel = Bot.getShardManager().getTextChannelById(channelID);
+        if (textChannel != null) {
+            textChannel.retrieveMessageById(gameMessageID).queue(gameMessage -> gameMessage.delete().queue());
+        }
+    }
+
     public void run(Guild guild, TextChannel channel, String userInput) {
+        lastAction = System.currentTimeMillis();
         if (userInput.equals("stop") && gameActive) {
-            channel.sendMessage("Thanks for playing, " + user.getAsMention() + "!").queue();
-            gameActive = false;
+            stop();
+            channel.sendMessage("Thanks for playing, " + user.getAsMention() + "!")
+                    .queue(msg -> msg.delete().queueAfter(10, TimeUnit.SECONDS));
         }
         if (userInput.equals("play") && !gameActive) {
             newGame(channel);

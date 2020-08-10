@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameUtil {
 
@@ -34,10 +36,8 @@ public class GameUtil {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Sokobot | Level " + level);
         embed.setDescription(game);
-        embed.addField(
-                "Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
-                        + "recreate the map",
-                "", false);
+        embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
+                               + "recreate the map", "", false);
         embed.addField("Player", user.getAsMention(), false);
         channel.sendMessage(embed.build()).queue();
     }
@@ -46,10 +46,8 @@ public class GameUtil {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Sokobot | Level " + level);
         embed.setDescription(game);
-        embed.addField(
-                "Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
-                        + "recreate the map",
-                "", false);
+        embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
+                               + "recreate the map", "", false);
         embed.addField("Player", user.getAsMention(), false);
         message.editMessage(embed.build()).queue();
     }
@@ -62,5 +60,22 @@ public class GameUtil {
                         .getPrefix(guild) + "stop`` to quit ");
         embed.setFooter("You can also press any reaction to continue.");
         message.editMessage(embed.build()).queue();
+    }
+
+    public static void runGameTimer() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                long now = System.currentTimeMillis();
+                for (long playerId : games.keySet()) {
+                    Game game = games.get(playerId);
+                    long timeDifference = now - game.lastAction;
+                    if (timeDifference > 10 * 60 * 1000) {
+                        game.stop();
+                        GameUtil.removeGame(playerId);
+                    }
+                }
+            }
+        }, 10 * 60 * 1000, 60 * 1000);
     }
 }

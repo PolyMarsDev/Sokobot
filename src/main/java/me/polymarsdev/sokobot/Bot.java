@@ -3,6 +3,7 @@ package me.polymarsdev.sokobot;
 import me.polymarsdev.sokobot.database.Database;
 import me.polymarsdev.sokobot.listener.CommandListener;
 import me.polymarsdev.sokobot.listener.GameListener;
+import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -75,6 +76,7 @@ public class Bot {
         builder.setActivity(Activity.playing("@Sokobot for info!"));
         builder.addEventListeners(new GameListener(), new CommandListener());
         shardManager = builder.build();
+        GameUtil.runGameTimer();
         Thread consoleThread = new Thread(() -> {
             Scanner s = new Scanner(System.in);
             while (s.hasNextLine()) {
