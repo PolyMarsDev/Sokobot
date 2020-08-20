@@ -1,3 +1,5 @@
+package me.polymarsdev.sokobot.objects;
+
 public class Tile
 {
     final int GROUND = 0;

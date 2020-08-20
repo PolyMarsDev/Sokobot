@@ -1,3 +1,5 @@
+package me.polymarsdev.sokobot.objects;
+
 public class Box
 {
     int x = 0;
