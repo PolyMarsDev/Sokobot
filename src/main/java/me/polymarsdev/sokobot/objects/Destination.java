@@ -1,8 +1,8 @@
 package me.polymarsdev.sokobot.objects;
 
 public class Destination {
-    int x = 0;
-    int y = 0;
+    int x;
+    int y;
     Grid currentGrid;
 
     public Destination(int x, int y, Grid currentGrid) {
