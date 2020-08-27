@@ -165,14 +165,14 @@ public class Grid {
 
     public String toString() {
         updateGrid();
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                result += grid[j][i];
+                result.append(grid[j][i]);
             }
-            result += "\n";
+            result.append("\n");
         }
-        return result;
+        return result.toString();
     }
 
 }
