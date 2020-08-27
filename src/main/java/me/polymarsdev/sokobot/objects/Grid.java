@@ -59,14 +59,6 @@ public class Grid {
         updateGrid();
     }
 
-    public void setStatus(int x, int y, int status) {
-        grid[x][y].setStatus(status);
-    }
-
-    public int getStatus(int x, int y) {
-        return grid[x][y].getStatus();
-    }
-
     public boolean isWall(int x, int y) {
         return grid[x][y].getStatus() == WALL;
     }
@@ -165,26 +157,6 @@ public class Grid {
             }
         }
         return true;
-    }
-
-    public Tile[][] getGrid() {
-        return grid;
-    }
-
-    public Box[] getBoxes() {
-        return boxes;
-    }
-
-    public Destination[] getDestinations() {
-        return destinations;
-    }
-
-    public int getBoxCount() {
-        return boxCount;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public int getWidth() {
