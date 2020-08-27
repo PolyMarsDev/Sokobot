@@ -13,7 +13,7 @@ public class CommandEvent {
     private static final int MAX_MESSAGES = 2;
 
     private final GuildMessageReceivedEvent event;
-    private String[] args;
+    private final String[] args;
 
     public CommandEvent(GuildMessageReceivedEvent event, String[] args) {
         this.event = event;
