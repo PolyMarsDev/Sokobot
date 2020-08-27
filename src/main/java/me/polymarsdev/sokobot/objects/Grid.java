@@ -14,9 +14,9 @@ public class Grid {
     Box[] boxes;
     Destination[] destinations;
     int boxCount;
-    int height = 0;
-    int width = 0;
-    int color = 0;
+    int height;
+    int width;
+    int color;
     Player player;
     String playerEmote;
 
