@@ -3,8 +3,8 @@ package me.polymarsdev.sokobot.entity;
 import me.polymarsdev.sokobot.objects.Grid;
 
 public class Player {
-    int x = 0;
-    int y = 0;
+    int x;
+    int y;
     Grid currentGrid;
 
     public Player(int x, int y, Grid currentGrid) {
