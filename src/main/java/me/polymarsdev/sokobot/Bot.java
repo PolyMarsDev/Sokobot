@@ -71,7 +71,7 @@ public class Bot {
                                 + "NULL);");
             }
         }
-        DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(token);
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setActivity(Activity.playing("@Sokobot for info!"));
         builder.addEventListeners(new GameListener(), new CommandListener());
