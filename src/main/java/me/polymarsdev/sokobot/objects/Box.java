@@ -2,10 +2,10 @@ package me.polymarsdev.sokobot.objects;
 
 public class Box
 {
-    int x = 0;
-    int y = 0;
-    int originalX = 0; //in case player messes up and wants to reset
-    int originalY = 0;
+    int x;
+    int y;
+    int originalX; //in case player messes up and wants to reset
+    int originalY;
     Grid currentGrid;
     public Box(int x, int y, Grid currentGrid)
     {
