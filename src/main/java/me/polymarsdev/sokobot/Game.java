@@ -63,8 +63,7 @@ public class Game {
             newGame(channel);
         } else if (gameActive) {
             if (!grid.hasWon()) {
-                String direction = userInput;
-                switch (direction) {
+                switch (userInput) {
                     case "up":
                     case "w":
                         grid.getPlayer().moveUp();
