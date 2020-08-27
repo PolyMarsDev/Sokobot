@@ -21,15 +21,7 @@ public class Tile
         this.color = color;
         this.playerEmote = playerEmote;
     }
-    public void setStatus(int status)
-    {
-        this.status = status;
-    }
-    public void setStatus(int status, int color)
-    {
-        this.status = status;
-        this.color = color;
-    }
+
     public int getStatus()
     {
         return this.status;
