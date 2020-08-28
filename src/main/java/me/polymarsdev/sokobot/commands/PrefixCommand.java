@@ -3,9 +3,7 @@ package me.polymarsdev.sokobot.commands;
 import me.polymarsdev.sokobot.Bot;
 import me.polymarsdev.sokobot.entity.Command;
 import me.polymarsdev.sokobot.event.CommandEvent;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
