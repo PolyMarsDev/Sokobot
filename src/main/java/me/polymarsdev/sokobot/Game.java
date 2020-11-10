@@ -3,8 +3,10 @@ package me.polymarsdev.sokobot;
 import me.polymarsdev.sokobot.objects.Grid;
 import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class Game {
     long gameMessageID;
@@ -34,14 +36,20 @@ public class Game {
 
     public void newGame(MessageChannel channel) {
         if (!gameActive) {
-            level = 1;
             width = 9;
             height = 6;
+            for (int i = 1; i < level; i++) updateWidthHeight();
             grid = new Grid(width, height, level, playerEmote);
             gameActive = true;
             lastAction = System.currentTimeMillis();
             GameUtil.sendGameEmbed(channel, String.valueOf(level), grid.toString(), user);
         }
+    }
+
+    // This method used to something earlier. (I actually just forgot what I used it for)
+    // It did not work like it was supposed to, so it was changed to this basic line.
+    private void queue(RestAction<Message> restAction, Consumer<? super Message> success) {
+        restAction.queue(success);
     }
 
     public void stop() {
@@ -53,64 +61,74 @@ public class Game {
     }
 
     public void run(Guild guild, TextChannel channel, String userInput) {
-        lastAction = System.currentTimeMillis();
         if (userInput.equals("stop") && gameActive) {
             stop();
             channel.sendMessage("Thanks for playing, " + user.getAsMention() + "!")
-                    .queue(msg -> msg.delete().queueAfter(10, TimeUnit.SECONDS));
+                   .queue(msg -> msg.delete().queueAfter(10, TimeUnit.SECONDS));
         }
         if (userInput.equals("play") && !gameActive) {
             newGame(channel);
         } else if (gameActive) {
-            if (!grid.hasWon()) {
-                String direction = userInput;
-                switch (direction) {
+            lastAction = System.currentTimeMillis();
+            boolean won = grid.hasWon();
+            if (!won) {
+                boolean moved = false;
+                switch (userInput) {
                     case "up":
                     case "w":
-                        grid.getPlayer().moveUp();
+                        moved = grid.getPlayer().moveUp();
                         break;
                     case "down":
                     case "s":
-                        grid.getPlayer().moveDown();
+                        moved = grid.getPlayer().moveDown();
                         break;
                     case "left":
                     case "a":
-                        grid.getPlayer().moveLeft();
+                        moved = grid.getPlayer().moveLeft();
                         break;
                     case "right":
                     case "d":
-                        grid.getPlayer().moveRight();
+                        moved = grid.getPlayer().moveRight();
                         break;
                     case "mr":
                         grid.resetMap();
+                        moved = true;
                         break;
                     case "r":
                         grid.reset();
+                        moved = true;
                         break;
                 }
-                if (!grid.hasWon()) {
+                grid.updateGrid();
+                won = grid.hasWon();
+                if (!won && moved) {
                     TextChannel textChannel = Bot.getShardManager().getTextChannelById(channelID);
                     if (textChannel != null) {
-                        textChannel.retrieveMessageById(gameMessageID).queue(gameMessage -> GameUtil
+                        queue(textChannel.retrieveMessageById(gameMessageID), gameMessage -> GameUtil
                                 .updateGameEmbed(gameMessage, String.valueOf(level), grid.toString(), user));
                     }
                 }
             }
-            if (grid.hasWon()) {
+            if (won) {
                 level += 1;
-                if (width < 13) {
-                    width += 2;
-                }
-                if (height < 8) {
-                    height += 1;
-                }
+                updateWidthHeight();
                 TextChannel textChannel = Bot.getShardManager().getTextChannelById(channelID);
                 if (textChannel != null) {
-                    textChannel.retrieveMessageById(gameMessageID)
-                            .queue(gameMessage -> GameUtil.sendWinEmbed(guild, gameMessage, String.valueOf(level)));
+                    queue(
+                            textChannel.retrieveMessageById(gameMessageID),
+                            gameMessage -> GameUtil.sendWinEmbed(guild, gameMessage, String.valueOf(level)));
                 }
                 grid = new Grid(width, height, level, playerEmote);
             }
+        }
+    }
+
+    private void updateWidthHeight() {
+        if (width < 13) {
+            width += 2;
+        }
+        if (height < 8) {
+            height += 1;
         }
     }
 }

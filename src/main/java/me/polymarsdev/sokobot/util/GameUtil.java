@@ -71,6 +71,7 @@ public class GameUtil {
                     Game game = games.get(playerId);
                     long timeDifference = now - game.lastAction;
                     if (timeDifference > 10 * 60 * 1000) {
+                        System.out.println("[INFO] Stopped inactive game of " + playerId);
                         game.stop();
                         GameUtil.removeGame(playerId);
                     }

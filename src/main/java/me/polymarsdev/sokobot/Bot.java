@@ -7,8 +7,10 @@ import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
@@ -16,8 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Bot {
     static HashMap<Long, String> prefixes = new HashMap<>();
@@ -71,10 +72,15 @@ public class Bot {
                                 + "NULL);");
             }
         }
-        DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(token);
+        List<GatewayIntent> intents = new ArrayList<>(
+                Arrays.asList(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS,
+                              GatewayIntent.GUILD_MESSAGE_REACTIONS));
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.create(token, intents);
         builder.setStatus(OnlineStatus.ONLINE);
         builder.setActivity(Activity.playing("@Sokobot for info!"));
         builder.addEventListeners(new GameListener(), new CommandListener());
+        builder.disableCache(
+                CacheFlag.CLIENT_STATUS, CacheFlag.ACTIVITY, CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
         shardManager = builder.build();
         GameUtil.runGameTimer();
         Thread consoleThread = new Thread(() -> {
