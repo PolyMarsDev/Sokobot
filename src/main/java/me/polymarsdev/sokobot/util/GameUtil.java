@@ -39,7 +39,15 @@ public class GameUtil {
         embed.addField("Enter direction (``up``, ``down``, ``left``, ``right``/``wasd``), ``r`` to reset or ``mr`` to "
                                + "recreate the map", "", false);
         embed.addField("Player", user.getAsMention(), false);
-        channel.sendMessage(embed.build()).queue();
+        channel.sendMessage(embed.build()).queue(message -> {
+            message.addReaction("U+2B05").queue();
+            message.addReaction("U+27A1").queue();
+            message.addReaction("U+2B06").queue();
+            message.addReaction("U+2B07").queue();
+            message.addReaction("U+1F504").queue();
+            Game theGame = GameUtil.getGame(user.getIdLong());
+            theGame.setGameMessage(message);
+        });
     }
 
     public static void updateGameEmbed(Message message, String level, String game, User user) {

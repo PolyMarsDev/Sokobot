@@ -14,6 +14,7 @@ public class InfoCommand extends Command {
 
     @Override
     public void execute(CommandEvent event) {
+        Bot.debug("Received info command (or bot mention)");
         Guild guild = event.getGuild();
         EmbedBuilder info = new EmbedBuilder();
         final String prefix = Bot.getPrefix(guild);
@@ -30,16 +31,17 @@ public class InfoCommand extends Command {
                 + "Java HashMaps:tm:, multiple users can use the bot at the same time without interfering with one "
                 + "another.\n:white_small_square:**Custom prefixes**\nTo prevent Sokobot from conflicting with other "
                 + "bots, admins can choose any single-character prefix to preface Sokobot's commands.", false);
-        info.addField("Commands",
-                      ("``" + prefix + "play`` can be used to start a game if you are not " + "currently in "
-                              + "one.\n``" + prefix + "stop`` can be used to stop your active game at any "
-                              + "time.\n``" + prefix + "info`` provides some useful details about the bot and "
-                              + "rules of " + "the game.\n``" + Bot.getPrefix(guild)
-                              + "prefix [character]`` can be used to " + "change the prefix the " + "bot responds to."),
-                      false);
-        info.addField("Add to your server",
-                      "https://top.gg/bot/713635251703906336\nSokobot is currently in " + Bot.getShardManager()
-                              .getGuilds().size() + " servers.", false);
+        info.addField(
+                "Commands",
+                ("``" + prefix + "play`` can be used to start a game if you are not " + "currently in " + "one.\n``"
+                        + prefix + "stop`` can be used to stop your active game at any " + "time.\n``" + prefix
+                        + "info`` provides some useful details about the bot and " + "rules of " + "the game.\n``" + Bot
+                        .getPrefix(guild) + "prefix [character]`` can be used to " + "change the prefix the "
+                        + "bot responds to."), false);
+        info.addField(
+                "Add to your server",
+                "https://top.gg/bot/713635251703906336\nSokobot is currently in " + Bot.getShardManager().getGuilds()
+                                                                                       .size() + " servers.", false);
         /*
         // Official Support Server
         info.addField("Support / Feedback",

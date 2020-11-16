@@ -58,7 +58,10 @@ public class GameListener extends ListenerAdapter {
                         reactionCommand = false;
                         break;
                 }
-                if (reactionCommand) game.run(guild, channel, userInput);
+                Bot.debug("Executing reaction input: " + userInput);
+                if (reactionCommand) {
+                    game.run(guild, channel, userInput);
+                } else Bot.debug("Received invalid reaction command: " + event.getReactionEmote().getName());
                 if (guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_MANAGE))
                     reaction.removeReaction(user).queue();
             }

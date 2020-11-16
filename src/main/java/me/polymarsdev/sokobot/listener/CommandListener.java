@@ -1,13 +1,11 @@
 package me.polymarsdev.sokobot.listener;
 
 import me.polymarsdev.sokobot.Bot;
-import me.polymarsdev.sokobot.Game;
 import me.polymarsdev.sokobot.commands.GameInputCommand;
 import me.polymarsdev.sokobot.commands.InfoCommand;
 import me.polymarsdev.sokobot.commands.PrefixCommand;
 import me.polymarsdev.sokobot.entity.Command;
 import me.polymarsdev.sokobot.event.CommandEvent;
-import me.polymarsdev.sokobot.util.GameUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -36,35 +34,6 @@ public class CommandListener extends ListenerAdapter {
         Message message = event.getMessage();
         TextChannel channel = event.getChannel();
         Guild guild = event.getGuild();
-        if (user.getId().equals(event.getJDA().getSelfUser().getId())) {
-            List<MessageEmbed> embeds = message.getEmbeds();
-            if (embeds.size() > 0) {
-                MessageEmbed embed = embeds.get(0);
-                if (embed.getTitle() != null && embed.getTitle().length() > 0) {
-                    if (embed.getTitle().startsWith("Sokobot | Level ")) {
-                        message.addReaction("U+2B05").queue();
-                        message.addReaction("U+27A1").queue();
-                        message.addReaction("U+2B06").queue();
-                        message.addReaction("U+2B07").queue();
-                        message.addReaction("U+1F504").queue();
-                        List<MessageEmbed.Field> fields = embed.getFields();
-                        for (MessageEmbed.Field field : fields) {
-                            if (field.getName() != null && field.getName().equals("Player")) {
-                                if (field.getValue() != null) {
-                                    long playerId = Long
-                                            .parseLong(field.getValue().substring(2, field.getValue().length() - 1));
-                                    if (GameUtil.hasGame(playerId)) {
-                                        Game game = GameUtil.getGame(playerId);
-                                        game.setGameMessage(message);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return;
-        }
         String msgRaw = message.getContentRaw();
         String[] args = msgRaw.split("\\s+");
         if (args.length > 0) {
@@ -88,13 +57,19 @@ public class CommandListener extends ListenerAdapter {
                 }
             }
             if (isCommand) {
+                Bot.debug("Command received: " + arg);
                 if (!hasPermissions(guild, channel)) {
+                    Bot.debug("Not enough permissions to run command: " + arg);
                     sendInvalidPermissionsMessage(user, channel);
                     return;
                 }
                 Command command = commands.get(arg);
                 if (isMention) command = commands.get("info");
-                if (command == null) return;
+                if (command == null) {
+                    Bot.debug("Received command does not exist: " + arg);
+                    return;
+                }
+                Bot.debug("Executing command: " + arg);
                 command.execute(new CommandEvent(event, Arrays.copyOfRange(msgRaw.split("\\s+"), 1, args.length)));
             }
         }
