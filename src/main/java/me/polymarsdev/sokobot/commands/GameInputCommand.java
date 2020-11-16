@@ -29,6 +29,7 @@ public class GameInputCommand extends Command {
         } else game = GameUtil.getGame(user.getIdLong());
         //
         String userInput = this.getName().toLowerCase();
+        Bot.debug("Processing game input: " + userInput);
         if (userInput.equals("play")) {
             if (!game.gameActive) {
                 if (args.length > 0 && EmojiManager.isEmoji(args[0])) game.setPlayerEmote(args[0]);

@@ -10,7 +10,7 @@ public class Database {
     /**
      * SQLite Data
      * Set this data if you use DBType#SQLite
-     *
+     * <p>
      * field filePath - This can either be a relative or absolute path.
      * ex: sokobot.db
      * or: C:/sqlite/db/sokobot.db
@@ -82,8 +82,7 @@ public class Database {
 
     public ResultSet query(String sql) {
         try {
-            ResultSet rs = con.prepareStatement(sql).executeQuery();
-            return rs;
+            return con.prepareStatement(sql).executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
