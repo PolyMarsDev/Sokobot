@@ -120,7 +120,7 @@ public class CommandEvent {
                 int index = stringtoSend.lastIndexOf("\n", 2000);
                 if (index < leeway) {
                     index = stringtoSend.lastIndexOf(" ", 2000);
-                index = 2000;
+                    index = 2000;
                 }
                 String temp = stringtoSend.substring(0, index).trim();
                 if (!temp.equals("")) msgs.add(temp);
