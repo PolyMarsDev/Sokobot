@@ -118,8 +118,10 @@ public class CommandEvent {
             while (stringtoSend.length() > 2000) {
                 int leeway = 2000 - (stringtoSend.length() % 2000);
                 int index = stringtoSend.lastIndexOf("\n", 2000);
-                if (index < leeway) index = stringtoSend.lastIndexOf(" ", 2000);
-                if (index < leeway) index = 2000;
+                if (index < leeway) {
+                    index = stringtoSend.lastIndexOf(" ", 2000);
+                index = 2000;
+                }
                 String temp = stringtoSend.substring(0, index).trim();
                 if (!temp.equals("")) msgs.add(temp);
                 stringtoSend = stringtoSend.substring(index).trim();

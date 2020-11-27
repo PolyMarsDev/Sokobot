@@ -36,35 +36,30 @@ public class Tile
     }
     public String toString()
     {
-        if (status == GROUND)
-        {
-            return ":black_large_square:";
+        switch(status){
+            case GROUND:
+                return ":black_large_square:";
+            case WALL:
+                switch (color) {
+                    case 0:
+                        return ":red_square:";
+                    case 1:
+                        return ":orange_square:";
+                    case 2:
+                        return ":yellow_square:";
+                    case 3:
+                        return ":green_square:";
+                    case 4:
+                        return ":blue_square:";
+                    default:
+                        return ":purple_square:";
+                }
+            case BOX:
+                return ":brown_square:";
+            case DESTINATION:
+                return ":negative_squared_cross_mark:";
+            default:
+                return playerEmote;
         }
-        if (status == WALL)
-        {
-            switch (color) {
-                case 0:
-                    return ":red_square:";
-                case 1:
-                    return ":orange_square:";
-                case 2:
-                    return ":yellow_square:";
-                case 3:
-                    return ":green_square:";
-                case 4:
-                    return ":blue_square:";
-                default:
-                    return ":purple_square:";
-            }
-        }
-        if (status == BOX)
-        {
-            return ":brown_square:";
-        }
-        if (status == DESTINATION)
-        {
-            return ":negative_squared_cross_mark:";
-        }
-        return playerEmote;
     }
 }
