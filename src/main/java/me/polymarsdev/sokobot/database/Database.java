@@ -25,7 +25,7 @@ public class Database {
     private final int mysql_port = 3306;
     private final String mysql_database = "sokobot";
     private final String mysql_username = "sokobot";
-    private final String mysql_password = "$€cUR€_P4sSw0R!)";
+    private final String mysql_password = "$â‚¬cURâ‚¬_P4sSw0R!)";
 
     private Connection con = null;
 
