@@ -25,3 +25,12 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Shadow Jar with Gradle
+      run: ./gradlew shadowJar
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: Sokobot
+        # Directory containing files to upload
+        path: build/libs
