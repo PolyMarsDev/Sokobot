@@ -23,3 +23,4 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/gradle
 .settings/
 .project
+.classpath
